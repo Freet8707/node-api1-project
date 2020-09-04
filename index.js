@@ -60,6 +60,21 @@ server.patch('/api/user-modify/:id', (req, res) => {
     }
 })
 
+server.put('/api/user-modify/:id', (req, res) => {
+    const { id } = req.params;
+    const newUser = req.body;
+    newUser.id = id
+
+    let modified = users.findIndex(user => user.id === id)
+
+    if(modified !== -1){
+        users[modified] = newUser
+        res.status(200).json(newUser)
+    } else {
+        return res.status(404).json({ message: 'user not found' })
+    }
+})
+
 server.listen(PORT, () => {
     console.log('server listening on localhost:', PORT)
 })
