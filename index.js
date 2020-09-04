@@ -22,9 +22,13 @@ server.post('/api/sign-up', (req, res) => {
     const user = req.body;
     user.id = shortid.generate();
 
-    users.push(user)
+    if(user.name !== undefined && user.bio !== undefined){
+        users.push(user)
+        res.status(201).json(user)
+    } else {
+        res.status(405).json({ message: 'must include name and bio'})
+    }
 
-    res.status(201).json(user)
 })
 
 server.get('/api/users-list', (req, res) => {
