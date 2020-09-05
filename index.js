@@ -26,14 +26,29 @@ server.post('/api/sign-up', (req, res) => {
         users.push(user)
         res.status(201).json(user)
     } else {
-        res.status(405).json({ message: 'must include name and bio'})
+        res.status(400).json({ message: 'must include name and bio'})
     }
 
 })
 
 server.get('/api/users-list', (req, res) => {
+    if(users.length !== 0){
+        res.json(users)
+    } else {
+        res.status(500).json({ message: 'The users information could not be retrieved.' })
+    }
+})
 
-    res.json(users)
+server.get('/api/users-list/:id', (req, res) => {
+    const { id } = req.params;
+
+    const foundUser = users.find(user => user.id === id)
+    
+    if(foundUser){
+        res.status(200).json(foundUser)
+    } else {
+        res.status(404).json({ message: "The user with the specified ID does not exist." })
+    }
 })
 
 server.delete('/api/user-delete/:id', (req, res) => {
