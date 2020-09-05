@@ -61,7 +61,7 @@ server.delete('/api/user-delete/:id', (req, res) => {
         users = users.filter(user => user.id !== id)
         res.status(201).json(deleted)
     } else {
-        return res.status(404).json({ message: 'user not found '})
+        return res.status(404).json({ message: 'The user with the specified ID does not exist.' })
     }
 });
 
@@ -75,7 +75,7 @@ server.patch('/api/user-modify/:id', (req, res) => {
         Object.assign(modified, newUser)
         res.status(200).json(newUser)
     } else {
-        return res.status(404).json({ message: 'user not found' })
+        return res.status(404).json({ message: 'The user with the specified ID does not exist.' })
     }
 })
 
@@ -85,12 +85,14 @@ server.put('/api/user-modify/:id', (req, res) => {
     newUser.id = id
 
     let modified = users.findIndex(user => user.id === id)
-
+    if(newUser.name === undefined || newUser.bio === undefined){
+        return res.status(400).json({ message: 'Please provide name and bio for the user.' })
+    }
     if(modified !== -1){
         users[modified] = newUser
         res.status(200).json(newUser)
     } else {
-        return res.status(404).json({ message: 'user not found' })
+        return res.status(404).json({ message: 'The user with the specified ID does not exist.' })
     }
 })
 
